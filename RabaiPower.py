@@ -8,3 +8,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
+from plotly import graph_objs as go
+
+import fbprophet
+from fbprophet import Prophet
+#from prophet import Prophet 
+from fbprophet.plot import plot_plotly
+
+import base64
