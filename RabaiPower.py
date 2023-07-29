@@ -31,6 +31,10 @@ cost600=0
 cost900=0
 
 
+image = Image.open('untitled.png')
+st.image(image, width=680,) 
+
+
 #st.title("ELECTRICITY CONSUMPTION")
 st.write("""
 # ELECTRICITY CONSUMPTION PREDICTION WEB APP ⚡️
