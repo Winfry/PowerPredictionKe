@@ -319,5 +319,10 @@ with st.spinner('Training model......'):
 
      st.success('Done Training!')
      with st.spinner('Plotting Data'):
-          example(("STEP3: SEE THE RESULT"))           
+          example(("STEP3: SEE THE RESULT"))  
+          st.subheader('Forecast Data Overview')
+          my_expander = st.expander('Future Electricity Bill', expanded=True)
+          with my_expander:
+               if option==0 or option==1:
+                    st.write         
                    
