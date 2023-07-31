@@ -42,3 +42,6 @@ st.write("""
 This app predicts the **energy consumption for the next month**!📈  
 Download a sample dataset here if you don't have one:""")
 
+
+
+backup=pd.read_csv("RabaiSub.csv")
