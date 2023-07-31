@@ -212,5 +212,112 @@ with st.spinner('Training model......'):
           sum+=bringtonext1
 
 
-          
+          while sum>300 and sum<=600 and i<=(m-1):
+                sum+=matrix[i][1]
+                sum300+=matrix[i][1]
+                i+=1
+          total=sum300+bringtonext2
+          if total>300:
+                bringtonext3=total-300
+                sum300=300
+                total=300
+          cost300=total*0.5160
+          cost+=cost300
+          #sum300+=bringtonext2
+
+
+
+          while sum>600 and sum<=900 and i<=(m-1):
+                sum+=matrix[i][1]
+                sum600+=matrix[i][1]
+                i+=1
+          total=sum600+bringtonext3
+          if total>300:
+                bringtonext4=total-300
+                sum600=300
+                total=300
+          cost600=total*0.5460
+          cost+=cost600
+          #sum600+=bringtonext3
+
+
+
+          while sum>900 and i<=(m-1):
+                sum+=matrix[i][1]
+                sum900+=matrix[i][1]
+                i+=1
+          cost900=sum900*0.5710+bringtonext4*0.5710
+          cost+=cost900
+          sum900+=bringtonext4
+          sum+=bringtonext4
+          if cost<3:
+                cost100=0
+                cost200=0
+                cost300=0
+                cost600=0
+                cost900=0
+                minimumc=3
+                cost=minimumc
+
+
+          if option==1:
+            sum=0
+            sum200=0
+            i=0
+            cost=0
+            while sum<=200 and i<=(m-1):
+                sum+=matrix[i][1]
+                i+=1
+            
+            if sum>200:
+                bringtonext1=sum-200
+                sum=200
+            sum100=sum
+            cost100=sum*0.4350
+            cost+=cost100
+
+            while sum>200 and i<=(m-1):
+                sum+=matrix[i][1]
+                sum200+=matrix[i][1]
+                i+=1
+
+            cost200=round(sum200)*0.5090+round(bringtonext1)*0.5090
+            sum200+=bringtonext1
+            cost+=cost200
+            sum+=sum200
+            if cost<7.2:
+                cost100=0
+                cost200=0
+                minimumc=7.2
+                cost=minimumc
+
+        
+          if option==2:
+            sum=0
+            sum200=0
+   
+            i=0
+            cost=0
+            while i<=(m-1):
+                sum+=matrix[i][1]
+                i+=1
+            
+            cost+=sum*0.3360
+            
+            
+            tcost+=sum*0.3360
+            tcost+=round(highestdemand)*23.70
+            tsum+=round(highestdemand)
+            tsum+=sum
+            if cost<600:
+                cost=0
+                minimumc=600
+                tcost=minimumc
+
+
+
+
+     st.success('Done Training!')
+     with st.spinner('Plotting Data'):
+          example(("STEP3: SEE THE RESULT"))           
                    
