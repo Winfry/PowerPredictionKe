@@ -158,3 +158,59 @@ with st.spinner('Training model......'):
      m,n=periodd.shape
      values = periodd.values  
      matrix = np.concatenate([values])
+
+     import operator
+     Output = max(matrix, key = operator.itemgetter(1))
+     highesttime= Output[0]
+     highestdemand= Output[1]
+
+     sum=0
+     tsum=0
+     sum100=0
+     sum200=0
+     sum300=0
+     sum600=0
+     sum900=0
+     i=0
+     cost=0
+     tcost=0
+     total=0
+     bringtonext1=0
+     bringtonext2=0
+     bringtonext3=0
+     bringtonext4=0
+     minimumc=0
+     if option==0:
+
+          while sum<=200 and i<(m-1):
+               sum+=matrix[i][1]
+               sum100+matrix[i][1]
+               i+=1
+          if sum>200:
+               bringtonext1=sum-200
+               sum=200
+
+
+          sum100=sum
+          cost100=sum*0.2180
+          cost+=cost100
+
+
+          while sum>200 and sum<=300 and i<=(m-1):
+                sum+=matrix[i][1]
+                sum200+=matrix[i][1]
+                i+=1
+          total=sum200+bringtonext1
+          if total>100:
+                bringtonext2=total-100
+                sum200=100
+                total=100
+                sum=300
+          cost200=total*0.3340
+          cost+=cost200
+          #sum200+=bringtonext1
+          sum+=bringtonext1
+
+
+          
+                   
