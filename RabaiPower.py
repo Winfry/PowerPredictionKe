@@ -73,7 +73,7 @@ with st.sidebar:
 
 def plot_raw_data():
     fig=go.Figure()
-    fig.add_trace(go.Scatter(x=df['Datetime'],y=df['Energy_kWh'],name='Energy_kWh'))
+    fig.add_trace(go.Scatter(x=df['Datetime'],y=df['AvgKv1'],name='AvgKv1'))
     
     fig.layout.update(title_text="Energy Consumption History",xaxis_rangeslider_visible=True)
     st.plotly_chart(fig)
@@ -84,6 +84,77 @@ def plot_raw_data():
 def example (content):
      st.markdown(f'<p style="text-align:center;background-image: linear-gradient(to right,#ee8004, #fbe54b);color:#080807;font-family:Peace Sans; font-size:40px;border-radius:2%;">{content}</p>', unsafe_allow_html=True)
 example("Step 1: Tune Parameter") 
-  
 
-      
+option=0
+Tariff=("Tariff A - Domestic Tariff","Tariff B - Low Voltage for commercial", "Tariff E1 - Medium Voltage General Industrial Tariff" )
+Selected_period = st.selectbox("***SELECT YOUR PREFFERED TARIFF:***", Tariff)
+st.write("Don't know what tariff you're applying? [Refer here](https://www.tnb.com.my/assets/files/Tariff_Rate_Final_01.Jan.2014.pdf)")  
+if Selected_period=="Tariff A - Domestic Tariff":
+     option=0
+
+if Selected_period=='Tariff B - Low Voltage Commercial Tariff':
+     option=1
+
+if Selected_period=='Tariff E1 - Medium Voltage General Industrial Tariff':
+     option=2
+
+period_forecast=31
+Pt=("1 Week","2 Weeks","1 Month")
+Selected_period=st.selectbox("Determine the period to forecast:",Pt)
+if Selected_period=="1 Week":
+     period_forecast=7*24+2
+     type="H"
+
+if Selected_period=="2 Weeks":
+     period_forecast=14*24+2
+     type="H"
+
+if Selected_period=="1 Month":
+     period_forecast=31
+     type="d"
+
+
+
+
+
+
+example("STEP 2: FEED IN THE DATASET")
+st.subheader('***INPUT DATASET***')
+data_file = st.file_uploader("Upload at least past 1 month Energy Usage ",type=["csv"])               
+
+
+
+if data_file is not None:
+     #st.write(type(data_file))
+     file_details={"filename":data_file.name, "filetype":data_file.type, "filesize":data_file.size}
+     #st.write(file_details)
+     df=pd.read_csv(data_file)
+     with st.spinner('Visualizing data....'):
+          my_expander = st.expander("   Raw Data Preview", expanded=True)
+          with my_expander:
+               st.subheader('Raw Data Preview')
+               st.write('This dataset contains energy and power consumed per hour for **3** months from **July 2022 ** to **September 2022 **')
+               st.dataframe(df)
+               plot_raw_data()
+
+
+
+
+with st.spinner('Training model......'):
+     #df.columns['ds','y']
+     df=df.reset_index().rename(columns={'Datetime':'ds', 'AvgKv1':'y'})
+     model = Prophet()
+     model.fit(df)
+     future_dates =  model.make_future_dataframe(periods=period_forecast, freq=type)
+     prediction = model.predict(future_dates)
+     fig1=plot_plotly(model,prediction, xlabel='Datetime', ylabel='Electricity Consumption')
+     fig3=model.plot(prediction, xlabel='Date', ylabel='Electricity Consumption')
+     fig2=model.plot_components(prediction)
+     future=prediction[['ds','yhat']]
+     periodd=future.tail(period_forecast)
+     #fig0=plotly(periodd,xlabel='d=Datetime', ylabel='Electricity Consumption')
+     fig0=periodd.plot(x='ds', xlabel='Datetime', ylabel='Electricity Consumption' )
+
+     m,n=periodd.shape
+     values = periodd.values  
+     matrix = np.concatenate([values])
