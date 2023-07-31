@@ -32,7 +32,7 @@ cost900=0
 
 
 image = Image.open('untitled.png')
-st.image(image, width=680,) 
+st.image(image, width=500,) 
 
 
 #st.title("ELECTRICITY CONSUMPTION")
