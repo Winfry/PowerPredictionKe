@@ -324,5 +324,9 @@ with st.spinner('Training model......'):
           my_expander = st.expander('Future Electricity Bill', expanded=True)
           with my_expander:
                if option==0 or option==1:
-                    st.write         
+                    st.write("The electricity cost for next",Selected_period," is RM",format(cost,".2f"))
+               if option==2:
+                    st.write("The electricity cost for next",Selected_period," is RM",format(tcost,".2f"))
+               st.write("**ELECTRICITY BILL TABLE")
+                                  
                    
