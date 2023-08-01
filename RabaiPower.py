@@ -317,6 +317,7 @@ with st.spinner('Training model......'):
 
 
 
+     
      st.success('Done Training!')
      with st.spinner('Plotting Data'):
           example(("STEP3: SEE THE RESULT"))  
@@ -328,5 +329,86 @@ with st.spinner('Training model......'):
                if option==2:
                     st.write("The electricity cost for next",Selected_period," is RM",format(tcost,".2f"))
                st.write("**ELECTRICITY BILL TABLE")
-                                  
+               if option==0:
+            
+                table=[['Tariff Blocks(kWh)','Consumption(kWh)','Price(RM)','Amount(RM)'],['200',str(format(round(sum100))),'0.218',str(format(cost100,".2f"))],['100',str(round(sum200)),'0.334',str(format(cost200,".2f"))],['300',str(round(sum300)),'0.516',str(format(cost300,".2f"))],['300',str(round(sum600)),'0.546',str(format(cost600,".2f"))],['Over 900',str(round(sum900)),'0.571',str(format(cost900,".2f"))],['Minimum Monthly Charge','','7.20',str(format(round(minimumc)))],['','','',''],['Total',str(round(sum)),'',str(format(cost,".2f"))]]
+                st.table(table)
+
+               if option==1:
+            
+                table=[['Tariff Blocks(kWh)','Consumption(kWh)','Price(RM)','Amount(RM)'],['200',str(format(round(sum100))),'0.435',str(format(cost100,".2f"))],['Over 200',str(round(sum200)),'0.509',str(format(cost200,".2f"))],['Minimum Monthly Charge','','7.20',str(format(round(minimumc)))],['','','',''],['Total',str(round(sum)),'',str(format(cost,".2f"))]]
+                st.table(table)
+        
+               if option==2:
+                table=[['Tariff Blocks(kWh)','Consumption(kWh)','Price(RM)','Amount(RM)'],['For all kWh',str(format(round(sum))),'0.336',str(format(cost,".2f"))],['Maximum Demand Charge',str(format(round(highestdemand))),'23.70',str(round(highestdemand)*23.70)],['Minimum Monthly Charge','','600',str(format(round(minimumc)))],['','','',''],['Total',str(round(tsum)),'',str(format(tcost,".2f"))]]
+                st.table(table)
+                
+        
+
+          my_expander = st.expander("Electricity Consumption", expanded=True)
+          with my_expander:
+            st.subheader("Overview of predicted eletrcity consumption")
+            st.set_option('deprecation.showPyplotGlobalUse', False)
+            periodd.plot(x='ds',xlabel='Datetime', ylabel='Electricity Consumption (kWh)')
+            st.pyplot()
+            st.subheader("Overview of overall eletrcity consumption")
+            st.plotly_chart(fig1,use_container_width=True,xlabel='Datetime',ylabel='Electrcity Consumption')
+            st.write('⚫Black dots indicate the **actual consumption**.')
+            st.write('🔵Blue line indicates the **predicted consumption**.')
+            st.write('Note: Black dots only appear from **1 Jan 2021** to **31 July 2021** because the actual consumptions only available in this period.')
+            st.subheader('Prediction table')
+            st.write('Note: ds represents datatime, yhat represents predicted electricity consumption')
+            st.write(prediction[['ds','yhat','yhat_lower','yhat_upper']])
+        
+            #st.write(prediction)
+          my_expander = st.expander("Analysis Report", expanded=True)
+          with my_expander:
+            st.write('The following graphs show the pattern of the electrcity consumption throughout the period.')
+            st.write(fig2) 
+            if option==2:
+                st.subheader("Analysis Report")
+                st.write("We detected that you will be charged for a maximum demand of RM ",format(highestdemand*23.70,".2f"), "[ ", format(highestdemand,".2f")," kW x RM 23.70/kW]")
+                st.write("This is due to your highest electrcity consumption, ",format(highestdemand,".2f")," kW on ",highesttime)
+                st.write("[Learn more about Maximum Demand charges](https://www.tnb.com.my/commercial-industrial/maximum-demand)")  
+                st.write("To avoid being charged for a high amount of payment, please do follow the following practise: ") 
+                st.write("1. Opting for any promotional scheme offered by TNB relating to MD such as Sunday Tariff Rider Scheme (STR) so that no maximum charges will be applied on Sundays.") 
+                st.write("2. Starts your motor/equipment in stages or during off-peak period.") 
+                st.write("3. Practicing demand side management such as peak shift i.e. shifting their peak operation/consumption to off peak period as MD charges is not applicable during off-peak period for customer with peak/off-peak tariff.") 
+                image=Image.open('time.png')
+                st.image(image,width=680,)
+                st.write("You are eligible to enjoy **20% discount** if you consumed electricity between 10pm to 8am [Off Peak Hour]")
+                st.write("[Learn more about Off Peak Tariff](https://www.mytnb.com.my/business/special-schemes/off-peak-tariff-rider)") 
+                col1, col2, col3 = st.columns(3)
+                col1.metric(label="Original Electrcity Bill (RM)", value=format(tcost,".2f") )
+                col2.metric(label="Deducted Electrcity Bill (RM)", value=format(tcost*80/100,".2f") , delta="-20%")
+
+                
+
+            if option==1:
+                st.write("It has been detected that you will consume electrcity on weekdays and peak hour")
+                st.write("Therefore, there's chance for you to reduce the electrcity bills")
+                image=Image.open('time.png')
+                st.image(image,width=680,)
+                st.write("You are eligible to enjoy **20% discount** if you consumed electricity between 10pm to 8am [Off Peak Hour]")
+                st.write("[Learn more about Off Peak Tariff](https://www.mytnb.com.my/business/special-schemes/off-peak-tariff-rider)") 
+                col1, col2, col3 = st.columns(3)
+                col1.metric(label="Original Electrcity Bill (RM)", value=format(cost,".2f") )
+                col2.metric(label="Deducted Electrcity Bill (RM)", value=format(cost*80/100,".2f") , delta="-20%")
+
+          data_prediction=pd.DataFrame(periodd)
+          coded_data=base64.b64encode(data_prediction.to_csv(index=False).encode()).decode()
+          st.markdown(f'<a href="data:file/csv;base64,{coded_data}" download="prediction_data.csv">Download Predicted Data</a>',unsafe_allow_html=True)
+     st.success('Finished!')
+
+    
+    
+  
+    
+    
+    
+#st.write('This line chart predicts the energy consumption in next month(**August 2021**)')
+    
+##st.write(data.tail())
+##st.line_chart(data['AEP_MW'])
+ 
                    
